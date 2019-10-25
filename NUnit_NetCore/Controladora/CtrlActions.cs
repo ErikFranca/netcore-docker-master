@@ -20,6 +20,7 @@ namespace FluxoVendaCartoes
         {
             Global.driver.FindElement(elemento).Clear();
         }
+       
         public void Clear(string pAction)
         {
             try

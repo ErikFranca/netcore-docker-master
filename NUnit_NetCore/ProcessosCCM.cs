@@ -1,12 +1,23 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using System.Threading;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+
 
 namespace FluxoVendaCartoes
 {
     public class ProcessosCCM
     {
         CtrlRelatorio relatorio = new CtrlRelatorio();
+        int i = 0;
         public CtrlActions ctrlActions = null;
         public ProcessosCCM()
         {
@@ -17,6 +28,7 @@ namespace FluxoVendaCartoes
         {
             //relatorio.startStep("Acessar Site");
             Global.driver.Navigate().GoToUrl("https://www.kabum.com.br/");
+            Print("AcessarSite");
             //relatorio.endStep("Acesso realizado com sucesso");
         }
         public void pesquisarProduto()
@@ -26,6 +38,21 @@ namespace FluxoVendaCartoes
             ctrlChildActionLogin.SendKeys(By.CssSelector("#form-busca > input.sprocura"), "iPhone");
             ctrlChildActionLogin.Click(By.Id("bt-busca"));
             ctrlChildActionLogin.IsElementPresent(By.XPath("//*[@id='BlocoConteudo']/div/div/div[2]/section"));
+            Thread.Sleep(2000);
+            Print("PesquisarProduto");
+            //relatorio.endStep("Pesquisa realizada com sucesso");
+        }
+
+        public void pesquisarOutroProduto()
+        {
+            //relatorio.startStep("Pesquisar Produto");
+            CtrlChildActionLogin ctrlChildActionLogin = new CtrlChildActionLogin();
+            Global.driver.Navigate().Back();
+            ctrlChildActionLogin.SendKeys(By.CssSelector("#form-busca > input.sprocura"), "Televisão");
+            ctrlChildActionLogin.Click(By.Id("bt-busca"));
+            ctrlChildActionLogin.IsElementPresent(By.XPath("//*[@id='BlocoConteudo']/div/div/div[2]/section"));
+            Thread.Sleep(2000);
+            Print("PesquisarOutroProduto");
             //relatorio.endStep("Pesquisa realizada com sucesso");
         }
 
@@ -62,6 +89,19 @@ namespace FluxoVendaCartoes
 
         }
 
+        public void Print(string FileName)
+        {
+            string filename = Global.PathDoProjeto + "Kabum" + "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + FileName + ".png";
+            Thread.Sleep(2000);
+            Screenshot ss = ((ITakesScreenshot)Global.driver).GetScreenshot();
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+            }
+            ss.SaveAsFile(filename, ScreenshotImageFormat.Png);
+        }
+
+        
         public void Login(string login, string senha)
         { //Validar Seção de Login
 

@@ -24,7 +24,7 @@ namespace Starline
     {
         //public string wpath = PastaBase "C:\\ProgramData\\SISTEMAS\\Prints\\PortalExtranet";
         static ConexaoNpgSql Conexao;
-		public bool mostrarLog { get; set; }									
+        public bool mostrarLog { get; set; }
         public int CstID { get; set; }
         public int SitID { get; set; }
         public int ScnID { get; set; }
@@ -38,7 +38,7 @@ namespace Starline
         public string CustomerName { get; set; }
         public string SuiteName { get; set; }
         public string ScenarioName { get; set; }
-        public string TestName { get; set; }
+        public string TestName { get; set;}
         public string TestType { get; set; }
         public string AnalystName { get; set; }
         public string TestDesc { get; set; }
@@ -81,23 +81,23 @@ namespace Starline
         {
             string msg = null;
 
-            if (mostrarLog) {
-                if (ex != null)
-                {
-                    msg = NomeMetodo + " ( " + ex + " )";
 
-                }
-                else
-                {
-                    msg = NomeMetodo;
-                }
-                Console.Error.WriteLine(msg);
+            if (ex != null)
+            {
+                msg = NomeMetodo + " ( " + ex + " )";
+
             }
-          
-			 
-								 
-			 
-										 
+            else
+            {
+                msg = NomeMetodo;
+            }
+            Console.Error.WriteLine(msg);
+
+
+
+
+
+
             return msg;
         }
 
@@ -274,7 +274,7 @@ namespace Starline
                 {
                     Console.Error.WriteLine("Falha de conexão com o banco do relatório");
                     return "1";
-                    
+
                 }
             }
             else
@@ -548,7 +548,7 @@ namespace Starline
         public bool EndTurnStep(int lgsID, string PrintPath = "", string logMsg = "", string reason = "")
         {
             try
-            {                
+            {
                 PrintPath = PrintPath.Replace(@"\", @"/");
                 PutImage(CstID, RptID, lgsID, PrintPath);
                 return true;
@@ -861,35 +861,19 @@ namespace Starline
 
                 if (Full)
                 {
-                    /*
-                        Dispositivo			Width	X	Heigh
-                        Reponsive			400		X	1397
-                        Galaxy S5			360		X	640			
-                        Pixel 2				411		X	731			
-                        Pixel 2 XL			411		X	823			
-                        iPhone 5/SE			320		X	568			
-                        iPhone 6/7/8		375		X	667			
-                        iPhone 6/7/8 Plus	414		X	736			
-                        iPhone X			375		X	812			
-                        iPad				768		X	1024		
-                        iPad Pro			1024	X	1366			
 
-                     */
-
-
-                    Image img = GetImageDoScreeShot(DriverDoSelenium);
 
                     Bitmap stitchedImage = null;
+                    long totalwidth1 = (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return document.body.offsetWidth");//documentElement.scrollWidth");
 
-                    long totalwidth1  = img.Width;// (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return document.width");// * DobretamanhoTela;//documentElement.scrollWidth");
-                    long totalHeight1 = (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return document.body.parentNode.scrollHeight");// * DobretamanhoTela;
+                    long totalHeight1 = (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return  document.body.parentNode.scrollHeight");
 
                     int totalWidth = (int)totalwidth1;
                     int totalHeight = (int)totalHeight1;
 
                     // Get the Size of the Viewport
-                    long viewportWidth1 = img.Width;// (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return document.body.clientWidth"");// * DobretamanhoTela;//documentElement.scrollWidth");
-                    long viewportHeight1 = (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return window.innerHeight");// * DobretamanhoTela;//documentElement.scrollWidth");
+                    long viewportWidth1 = (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return document.body.clientWidth");//documentElement.scrollWidth");
+                    long viewportHeight1 = (long)((IJavaScriptExecutor)DriverDoSelenium).ExecuteScript("return window.innerHeight");//documentElement.scrollWidth");
 
                     int viewportWidth = (int)viewportWidth1;
                     int viewportHeight = (int)viewportHeight1;
@@ -924,10 +908,7 @@ namespace Starline
 
                     // Build the Image
                     stitchedImage = new Bitmap(totalWidth, totalHeight);
-
-                    string[] ArrayImages = new string[1024];
                     // Get all Screenshots and stitch them together
-                    int NumImg=0;
                     Rectangle previous = Rectangle.Empty;
                     foreach (var rectangle in rectangles)
                     {
@@ -942,11 +923,15 @@ namespace Starline
                             System.Threading.Thread.Sleep(200);
                         }
 
+                        // Take Screenshot
+                        var screenshot = ((ITakesScreenshot)DriverDoSelenium).GetScreenshot();
 
                         // Build an Image out of the Screenshot
-                        Image screenshotImage= GetImageDoScreeShot(DriverDoSelenium);
-                        ArrayImages[NumImg] = GetImageBase64(screenshotImage);
-
+                        Image screenshotImage;
+                        using (MemoryStream memStream = new MemoryStream(screenshot.AsByteArray))
+                        {
+                            screenshotImage = Image.FromStream(memStream);
+                        }
 
                         // Calculate the Source Rectangle
                         Rectangle sourceRectangle = new Rectangle(viewportWidth - rectangle.Width, viewportHeight - rectangle.Height, rectangle.Width, rectangle.Height);
@@ -959,12 +944,9 @@ namespace Starline
 
                         // Set the Previous Rectangle
                         previous = rectangle;
-                        NumImg += 1;
-
                     }
 
-                    //stitchedImage.Save(filename, ImageFormat.Png);
-                    ConcatenarImagens(ArrayImages).Save(filename, ImageFormat.Png);
+                    stitchedImage.Save(filename, ImageFormat.Png);
                 }
                 else
                 {
@@ -979,6 +961,8 @@ namespace Starline
                 return null;
                 // handle
             }
+
+
 
         }
 
@@ -1118,7 +1102,7 @@ namespace Starline
         {
             var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
             // Build an Image out of the Screenshot
-            Image image=null;
+            Image image = null;
             using (MemoryStream memStream = new MemoryStream(screenshot.AsByteArray))
             {
                 image = Image.FromStream(memStream);

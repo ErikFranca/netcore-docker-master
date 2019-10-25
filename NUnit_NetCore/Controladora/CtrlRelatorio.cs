@@ -4,9 +4,9 @@ namespace FluxoVendaCartoes
 {
     class CtrlRelatorio
     {
-        public void startTest(string testName, string analystName, string testDesc, string testType, string preCondition, string postCondition, string inputData)
+        public void startTest(string analystName, string testDesc, string testType, string preCondition, string postCondition, string inputData)
         {
-            Global.processTest.TestName = testName; //Nome do Teste (recupera o nome do metodo)
+            Global.processTest.TestName = "Teste_de_Consumo"; //Nome do Teste (recupera o nome do metodo)
             Global.processTest.AnalystName = analystName; //Nome do Analista
             Global.processTest.TestDesc = testDesc; //Descricao do Teste
             Global.processTest.TestType = testType; //Tipo do Teste
@@ -37,7 +37,11 @@ namespace FluxoVendaCartoes
             Global.processTest.LgsID = Global.processTest.StartStep(Global.processTest.StepName, Global.processTest.StepTurn);
 
         }
-           
+
+        public void print()
+        {
+            Global.printFileName = Global.processTest.PrintPageComSelenium(Global.driver, false);
+        }
 
         public void endStep(string msgSucesso)
         {

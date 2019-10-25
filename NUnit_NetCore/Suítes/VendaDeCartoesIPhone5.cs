@@ -67,7 +67,7 @@ namespace FluxoVendaCartoes
             }
 
             Global.processTest.PastaBase = Global.PathDoProjeto;
-            Global.processTest.CustomerName = "marisa"; //CustomerName evitar Acentuacao e espaço
+            Global.processTest.CustomerName = "Kabum"; //CustomerName evitar Acentuacao e espaço
             Global.processTest.SuiteName = "CCM"; //CustomerName evitar Acentuacao e espaço
             Global.processTest.ScenarioName = MethodBase.GetCurrentMethod().DeclaringType.Name;
            
@@ -119,9 +119,8 @@ namespace FluxoVendaCartoes
         [Test]
         public void Teste_AcessoSite_PesquisaProduto()
         {
-
             Global.touchActions = new Actions(Global.driver);
-
+            
             try
             {
 
@@ -132,6 +131,9 @@ namespace FluxoVendaCartoes
 
                 //Validar Tela de Pesquisa
                 processosCCM.pesquisarProduto();
+
+                //Pesquisa outro produto
+                processosCCM.pesquisarOutroProduto();
 
             }
 
