@@ -92,7 +92,7 @@ namespace FluxoVendaCartoes
             {
 
                 Global.driver.Quit();
-                Global.compilaRelatorio();
+                //Global.compilaRelatorio();
 
             }
             catch (Exception)
@@ -101,20 +101,20 @@ namespace FluxoVendaCartoes
             }
         }
 
-        [OneTimeTearDown]
-        public void compilaRelatorio()
-        {
-            string retorno = Global.compilaRelatorio();
-            if (retorno == "[Done]\n")
-            {
-                Console.Error.WriteLine("Relatório gerado com sucesso! Clique no link abaixo:");
-                Console.Error.WriteLine("http://54.233.230.119/auto/reports/marisa/" + Global.processTest.ReportID.ToString());
-            }
-            else
-            {
-                Console.Error.WriteLine("Relatório gerado erro!");
-            }
-        }
+        //[OneTimeTearDown]
+        //public void compilaRelatorio()
+        //{
+        //    string retorno = Global.compilaRelatorio();
+        //    if (retorno == "[Done]\n")
+        //    {
+        //        Console.Error.WriteLine("Relatório gerado com sucesso! Clique no link abaixo:");
+        //        Console.Error.WriteLine("http://54.233.230.119/auto/reports/marisa/" + Global.processTest.ReportID.ToString());
+        //    }
+        //    else
+        //    {
+        //        Console.Error.WriteLine("Relatório gerado erro!");
+        //    }
+        //}
 
         [Test]
         public void Teste_AcessoSite_PesquisaProduto()
@@ -133,11 +133,12 @@ namespace FluxoVendaCartoes
                 processosCCM.pesquisarProduto();
 
                 //Pesquisa outro produto
-                processosCCM.pesquisarOutroProduto();
+                processosCCM.pesquisarOutrosProdutos();
+
 
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
             }

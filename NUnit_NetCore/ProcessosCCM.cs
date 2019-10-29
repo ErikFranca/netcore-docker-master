@@ -38,12 +38,12 @@ namespace FluxoVendaCartoes
             ctrlChildActionLogin.SendKeys(By.CssSelector("#form-busca > input.sprocura"), "iPhone");
             ctrlChildActionLogin.Click(By.Id("bt-busca"));
             ctrlChildActionLogin.IsElementPresent(By.XPath("//*[@id='BlocoConteudo']/div/div/div[2]/section"));
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             Print("PesquisarProduto");
             //relatorio.endStep("Pesquisa realizada com sucesso");
         }
 
-        public void pesquisarOutroProduto()
+        public void pesquisarOutrosProdutos()
         {
             //relatorio.startStep("Pesquisar Produto");
             CtrlChildActionLogin ctrlChildActionLogin = new CtrlChildActionLogin();
@@ -51,10 +51,19 @@ namespace FluxoVendaCartoes
             ctrlChildActionLogin.SendKeys(By.CssSelector("#form-busca > input.sprocura"), "Televisão");
             ctrlChildActionLogin.Click(By.Id("bt-busca"));
             ctrlChildActionLogin.IsElementPresent(By.XPath("//*[@id='BlocoConteudo']/div/div/div[2]/section"));
+            Thread.Sleep(1000);
+            Print("PesquisarOutrosProdutos");
+            Global.driver.Navigate().Back();
+            ctrlChildActionLogin.SendKeys(By.CssSelector("#form-busca > input.sprocura"), "Computador");
+            ctrlChildActionLogin.Click(By.Id("bt-busca"));
+            ctrlChildActionLogin.IsElementPresent(By.XPath("//*[@id='BlocoConteudo']/div/div/div[2]/section"));
             Thread.Sleep(2000);
-            Print("PesquisarOutroProduto");
+            Print("PesquisarOutrosProdutos");
+
             //relatorio.endStep("Pesquisa realizada com sucesso");
         }
+
+
 
         public void validaLogin()
         {
