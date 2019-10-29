@@ -58,7 +58,7 @@ namespace FluxoVendaCartoes
             ctrlChildActionLogin.Click(By.Id("bt-busca"));
             ctrlChildActionLogin.IsElementPresent(By.XPath("//*[@id='BlocoConteudo']/div/div/div[2]/section"));
             Thread.Sleep(2000);
-            Print("PesquisarOutrosProdutos");
+            Print("PesquisarOutrosProdutos1");
 
             //relatorio.endStep("Pesquisa realizada com sucesso");
         }
